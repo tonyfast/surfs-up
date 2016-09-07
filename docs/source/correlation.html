@@ -1,0 +1,147 @@
+---
+layout: base
+---
+
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">dropin.pipeline</span> <span class="k">import</span> <span class="n">SimplePipeline</span>
+<span class="kn">from</span> <span class="nn">whatever</span> <span class="k">import</span> <span class="n">_X</span>
+<span class="kn">from</span> <span class="nn">toolz.curried</span> <span class="k">import</span> <span class="n">first</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">FunctionTransformer</span>
+
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">np</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;normalized_correlation&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-22224dc85197&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> dropin<span class="ansi-blue-fg">.</span>pipeline <span class="ansi-green-fg">import</span> SimplePipeline
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> whatever <span class="ansi-green-fg">import</span> _X
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">from</span> toolz<span class="ansi-blue-fg">.</span>curried <span class="ansi-green-fg">import</span> first
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">from</span> sklearn<span class="ansi-blue-fg">.</span>preprocessing <span class="ansi-green-fg">import</span> FunctionTransformer
+<span class="ansi-green-intense-fg ansi-bold">      5</span> 
+
+<span class="ansi-red-fg">ImportError</span>: No module named &#39;dropin&#39;</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[65]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">weiner_khinchin_auto_correlation</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">_X</span><span class="p">()</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftn</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span> <span class="o">|</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftn</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span>
+<span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">](</span><span class="n">decimals</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[193]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">auto_correlation</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">windowed</span> <span class="o">=</span> <span class="n">weiner_khinchin_auto_correlation</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">windowed</span><span class="o">.</span><span class="n">_tokens</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">first</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftpack</span><span class="o">.</span><span class="n">fftn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftpack</span><span class="o">.</span><span class="n">ifftn</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">windowed</span><span class="o">.</span><span class="n">_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+    <span class="k">return</span> <span class="n">windowed</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>           
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cross_correlation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>    
+    <span class="n">fft_based_cross_correlation</span> <span class="o">=</span> <span class="n">_X</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftn</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftn</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+    <span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftn</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">](</span><span class="n">decimals</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fft_based_cross_correlation</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">apply_denominator</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,),</span> <span class="n">cutoff</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,)):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_over_axes</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">auto_correlation</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)),</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[328]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">correlation_model</span> <span class="o">=</span> <span class="n">FunctionTransformer</span><span class="p">(</span>
+    <span class="n">auto_correlation</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kw_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,))</span>
+<span class="p">)</span>
+
+<span class="n">normalization</span> <span class="o">=</span> <span class="n">FunctionTransformer</span><span class="p">(</span>
+    <span class="n">apply_denominator</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kw_args</span><span class="o">=</span><span class="p">{}</span>
+<span class="p">)</span>
+
+
+<span class="n">normalized_correlation</span> <span class="o">=</span> <span class="n">SimplePipeline</span><span class="p">([[</span><span class="n">correlation_model</span><span class="p">],</span> <span class="p">[</span><span class="n">normalization</span><span class="p">]],</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+    </div>
+  </div>
+</body>
