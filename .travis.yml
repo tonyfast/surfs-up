@@ -12,4 +12,4 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: tonyfast/magical-magic
+    repo: tonyfast/surfs-up

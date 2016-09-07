@@ -10,7 +10,7 @@ Installation
 ``pip install magical-magic``
 
 Basic Usage
------------
+===========
 
 .. code:: python
 
@@ -73,31 +73,21 @@ An example of a list
 
 .. code:: python
 
-    %%mistune
+    %%mistune -d
     ## Mistune Cell Magics
     
     `%%mistune` uses a pure Python markdown parser.  For convenience, jinja templates can be used to 
     tell us about the length of `data` is {{data.__len__()}}.
 
-
-
-.. raw:: html
-
-    <h2>Mistune Cell Magics</h2>
-    <p><code>%%mistune</code> uses a pure Python markdown parser.  For convenience, jinja templates can be used to 
-    tell us about the length of <code>data</code> is 3.</p>
-
-
-
 --------------
 
 Development
------------
+===========
 
 Running the Build and Tests
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
-::
+.. code:: bash
 
     pip install -r requirements-dev.txt
     python setup.py develop
@@ -108,9 +98,9 @@ files. ``py.test-ipynb`` will test all notebooks matching
 ``test-*.ipynb``.
 
 Running the docs
-^^^^^^^^^^^^^^^^
+----------------
 
-::
+.. code:: bash
 
     jekyll serve docs -wit
 

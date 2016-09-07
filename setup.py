@@ -7,14 +7,14 @@ def read(fname):
         return f.read()
 
 setuptools.setup(
-    name="magical-magic",
-    version="0.0.9",
+    name="surfs-up",
+    version="0.0.1",
     author="Tony Fast",
     author_email="tony.fast@gmail.com",
     description="Simple reusable magics.",
     license="BSD-3-Clause",
     keywords="IPython Magic Jupyter",
-    url="http://github.com/tonyfast/magical-magic",
+    url="http://github.com/tonyfast/surfs-up",
     packages=setuptools.find_packages(),
     long_description=read("readme.rst"),
     classifiers=[
@@ -30,6 +30,6 @@ setuptools.setup(
         "Topic :: Software Development :: Testing",
     ],
     install_requires=[
-        "IPython",
+        "",
     ]
 )
