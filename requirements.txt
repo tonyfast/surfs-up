@@ -1,4 +1,2 @@
-jinja2
-mistune
-pyyaml
-toolz
+scikit-learn
+whatever-forever

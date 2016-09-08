@@ -1,27 +1,27 @@
 # coding: utf-8
 
-# In[4]:
+# In[19]:
 
 from dropin.pipeline import SimplePipeline
 from whatever import _X
 from toolz.curried import first
 from sklearn.preprocessing import FunctionTransformer
 
-from pandas import np
+import numpy as np
 
 __version__ = "0.0.1"
 
-__all__ = ['normalized_correlation']
+__all__ = ['CorrelationModel']
 
 
-# In[65]:
+# In[20]:
 
 weiner_khinchin_auto_correlation = (
     _X() | np.fft.fftn | np.abs | (lambda x: x**2) | np.fft.ifftn | np.real
 )[np.around](decimals=13)
 
 
-# In[193]:
+# In[21]:
 
 def auto_correlation(im, **kwargs):
     windowed = weiner_khinchin_auto_correlation.copy()
@@ -33,7 +33,7 @@ def auto_correlation(im, **kwargs):
     return windowed.value(im)
 
 
-# In[2]:
+# In[22]:
 
 def cross_correlation(X, Y, **kwargs):
     fft_based_cross_correlation = _X(
@@ -42,25 +42,30 @@ def cross_correlation(X, Y, **kwargs):
     return fft_based_cross_correlation.value()
 
 
-# In[3]:
+# In[23]:
 
-def apply_denominator(X, s=(10, 10,), cutoff=(20, 20,)):
+def apply_denominator(X, sz=(10, 10,), s=(20, 20,)):
     return np.apply_over_axes(
-        lambda x, y: np.divide(x, auto_correlation(np.ones(s), s=cutoff)),
+        lambda x, y: np.divide(x, auto_correlation(np.ones(sz), s=s)),
         X, axes=[0]
     )
 
 
-# In[328]:
+# In[30]:
 
-correlation_model = FunctionTransformer(
-    auto_correlation, validate=False, kw_args=dict(s=(20, 20,))
-)
+def CorrelationModel(sz, **kwargs):
+    auto_correlation_model = FunctionTransformer(
+        auto_correlation, validate=False, kw_args={**kwargs, 'axes': _X(sz).len.add(1).range(1).list.value()}
+    )
 
-normalization = FunctionTransformer(
-    apply_denominator, validate=False, kw_args={}
-)
+    normalization = FunctionTransformer(
+        apply_denominator, validate=False, kw_args={'sz': sz, **kwargs}
+    )
+
+    return SimplePipeline([
+        #         [FunctionTransformer(_X().eq(0).compose, validate=False)],
+        [auto_correlation_model], [normalization]
+    ], n_jobs=1)
 
 
-normalized_correlation = SimplePipeline(
-    [[correlation_model], [normalization]], n_jobs=1)
+# In[ ]:

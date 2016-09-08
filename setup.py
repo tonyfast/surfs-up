@@ -30,6 +30,6 @@ setuptools.setup(
         "Topic :: Software Development :: Testing",
     ],
     install_requires=[
-        "",
+        "scikit-learn", "whatever-forever",
     ]
 )

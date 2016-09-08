@@ -1,83 +1,54 @@
 
-``magical-magic``
-=================
+``surfs-up``
+============
 
-Dead simple reusable ``IPython`` magics.
+Some things I like to use when I am surfing through data.
 
 Installation
 ------------
 
-``pip install magical-magic``
+``pip install surfs-up``
 
 Basic Usage
 ===========
 
 .. code:: python
 
-    import magical
-    env = magical.register_jinja2_magic() # returns a jinja environment
-    magical.register_mistune_magic(escape=False)
-    magical.register_yaml_magic()
+    from dropin import SimplePipeline, RavelPreProcessor, CorrelationModel
+    import numpy as np
+
+.. code:: python
+
+    im = np.random.randn(5, 100, 100) > 1
+
+.. code:: python
+
+    RavelPreProcessor.fit_transform(im).sum(axis=1)/100
+
 
 
 
 .. parsed-literal::
 
-    <IPython.core.display.Javascript object>
+    array([ 15.98,  15.94,  15.36,  15.65,  16.26])
 
-
-
-.. parsed-literal::
-
-    <IPython.core.display.Javascript object>
-
-
-
-.. parsed-literal::
-
-    <IPython.core.display.Javascript object>
 
 
 .. code:: python
 
-    data = {'🐮': 'moo', '🐑': 'bah', '🔥': 'burn'}
+    autocorrelation_result = CorrelationModel(sz=(100,100), s=(150, 150,)).fit_transform(im);
 
 .. code:: python
 
-    %%jinja2 
-    # Jinja Cell Magics
-    
-    `%%jinja2` inserts data from the notebook into the template.  
-    
-    ## An example of a list
-    
-    {% for key in data %}* {{key}} - __{{data[key]}}__
-    {% endfor %}
+    import numpy as np
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+    plt.pcolor(np.fft.fftshift(autocorrelation_result[0]));
 
 
 
-Jinja Cell Magics
-=================
+.. image:: ../readme_files/../readme_6_0.png
 
-``%%jinja2`` inserts data from the notebook into the template.
-
-An example of a list
---------------------
-
--  🐮 - **moo**
--  🔥 - **burn**
--  🐑 - **bah**
-
-
---------------
-
-.. code:: python
-
-    %%mistune -d
-    ## Mistune Cell Magics
-    
-    `%%mistune` uses a pure Python markdown parser.  For convenience, jinja templates can be used to 
-    tell us about the length of `data` is {{data.__len__()}}.
 
 --------------
 
@@ -109,5 +80,5 @@ Docs are hosted at ``http://localhost:4000/magical-magic/``.
 License
 -------
 
-``magical-magic`` is released as free software under the `BSD 3-Clause
+``surfs-up`` is released as free software under the `BSD 3-Clause
 license <https://github.com/tonyfast/magical-magic/blob/master/LICENSE>`__.

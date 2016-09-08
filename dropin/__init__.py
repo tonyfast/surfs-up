@@ -3,10 +3,13 @@
 # In[325]:
 
 from dropin.pipeline import SimplePipeline
-from dropin.correlation import normalized_correlation
+from dropin.correlation import CorrelationModel
+from dropin.models import RavelPreProcessor
+
+RavelPreProcessor
 
 __version__ = "0.0.1"
 
 __all__ = [
-    'SimplePipeline', 'normalized_correlation',
+    'SimplePipeline', 'CorrelationModel', 'RavelPreProcesser',
 ]
